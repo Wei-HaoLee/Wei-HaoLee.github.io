@@ -1,0 +1,145 @@
+/* Add a black background color to the top navigation */
+.topnav {
+    position: fixed;
+    background-color: #ffffff;
+    overflow: hidden;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+
+
+.floatingNav {
+    box-shadow: 0 0.2rem 1.2rem rgba(0, 0, 0, 0.3);
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  vertical-align: middle;
+  margin: 5px;
+}
+
+/* Right-aligned section inside the top navigation */
+.topnav-right {
+  float: right;
+}
+
+
+/* nav bar button */
+div a.nav-button {
+    /* height: 6vh; */
+    font-size: 1.3em;
+    color: #5e5e5f;
+}
+
+/* pseudo-class */
+.nav-button:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0.2rem 0rem rgba(3, 166, 255, 0.4);
+    color: #03a6ff;
+    /* animation: fadein 1.2s; */
+}
+
+.nav-button:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+
+.nav-button:active {
+  /* relative to initial state */
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.1rem 0rem rgba(3, 166, 255, 0.6);
+}
+/* space holder */
+.spaceholder {
+    width: 100%;
+    height: 6.5vh;
+}
+/* article */
+article div a.about-button {
+    padding: 0;
+    border-radius: 20px;
+    border: 2px solid #333030;
+    display: block;
+}
+/* .shift-top {
+    position: absolute;
+    top: 6.5vh;
+} */
+main img {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 50% auto;
+    opacity: 0.3;
+}
+/* main */
+.main-style {
+    width: 100%;
+    height: 81vh;
+    margin: 10px 30px;
+}
+.main-banner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    font-size: 3em;
+    padding: 40px 40px;
+    text-align: center;
+    border: 3px solid #333030;
+    margin: 20px auto;
+}
+.main-text-container {
+    position: relative;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+/* footer */
+.footer-style {
+    position:fixed;
+    width: 100%;
+    bottom: 0;
+    height: 10vh;
+    border-top: 0.5px solid #dddfe6;
+    color: white;
+    font-family: sans-serif;
+    background-color: #333030;
+}
+p.footer-words {
+    font-size: 16px;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+}
+.footer-icon {
+    font-size: 20px;
+    color: white;
+}
+.footer-link {
+    text-decoration: none;
+    color: white;
+}
+.footer-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: auto 20px;
+}
+.footer-right {
+    float: right;
+}
+/* animation */
+/* @keyframes fadein {
+    from { opacity: 1; }
+    to   { opacity: 0.8; }
+} */
