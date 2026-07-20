@@ -26,8 +26,16 @@ const pageSection = Astro.url.pathname.split('/').filter(Boolean)[0] ?? 'home';
     <link rel="canonical" href={canonical} />
     <title>{title}</title>
     <script is:inline>
-      const saved = localStorage.getItem('theme');
-      document.documentElement.dataset.theme = saved || 'light';
+      const savedTheme = localStorage.getItem('theme');
+      const supportedThemes = ['light', 'dark', 'photo'];
+      const localHour = new Date().getHours();
+      const automaticTheme = localHour >= 7 && localHour < 19 ? 'light' : 'dark';
+      const initialTheme = supportedThemes.includes(savedTheme) ? savedTheme : automaticTheme;
+      document.documentElement.dataset.theme = initialTheme;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute(
+        'content',
+        initialTheme === 'dark' ? '#202421' : initialTheme === 'photo' ? '#ede9dd' : '#f7f7f4'
+      );
     </script>
   </head>
   <body data-page={pageSection}>
@@ -43,6 +51,13 @@ const pageSection = Astro.url.pathname.split('/').filter(Boolean)[0] ?? 'home';
         dark: 'dark',
         photo: 'photo'
       };
+      const applyTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute(
+          'content',
+          theme === 'dark' ? '#202421' : theme === 'photo' ? '#ede9dd' : '#f7f7f4'
+        );
+      };
       const setThemeLabel = () => {
         const current = document.documentElement.dataset.theme || 'light';
         const next = themes[(themes.indexOf(current) + 1) % themes.length] || 'light';
@@ -53,9 +68,18 @@ const pageSection = Astro.url.pathname.split('/').filter(Boolean)[0] ?? 'home';
       themeButton?.addEventListener('click', () => {
         const current = document.documentElement.dataset.theme || 'light';
         const next = themes[(themes.indexOf(current) + 1) % themes.length] || 'light';
-        document.documentElement.dataset.theme = next;
+        applyTheme(next);
         localStorage.setItem('theme', next);
         setThemeLabel();
+      });
+      const syncAutomaticTheme = () => {
+        if (localStorage.getItem('theme')) return;
+        const hour = new Date().getHours();
+        applyTheme(hour >= 7 && hour < 19 ? 'light' : 'dark');
+        setThemeLabel();
+      };
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) syncAutomaticTheme();
       });
       setThemeLabel();
     </script>
