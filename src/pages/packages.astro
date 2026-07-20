@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import CollectionFilter from '../components/CollectionFilter.astro';
+
+const packages = [
+  {
+    icon: '/images/packages/alpine_icon.png',
+    iconAlt: 'ALPINE package icon',
+    name: 'ALPINE',
+    desc: 'A semi-supervised NMF framework that separates phenotype- and batch-associated signals from shared biological variation in multicondition single-cell RNA-seq data.',
+    lang: 'Python · BSD-3-Clause',
+    publication: 'Genome Research · 2025',
+    tags: ['Single-cell RNA-seq', 'Phenotype decoding', 'Interpretable NMF', 'Batch correction'],
+    links: [
+      { label: 'Code', href: 'https://github.com/ylaboratory/ALPINE' },
+      { label: 'Paper', href: 'https://doi.org/10.1101/gr.280566.125' },
+    ],
+  },
+  {
+    icon: '/images/packages/monte.png',
+    iconAlt: 'MONTE package icon',
+    name: 'MONTE',
+    desc: 'A cancer label-free framework for estimating tumor purity and recovering tumor-intrinsic, CpG-resolved profiles from bulk DNA methylation data.',
+    lang: 'Python · BSD-3-Clause',
+    publication: 'bioRxiv preprint · 2026',
+    tags: ['DNA methylation', 'Tumor purity', 'Methylation correction', 'Transfer learning'],
+    links: [
+      { label: 'Code', href: 'https://github.com/ylaboratory/MONTE' },
+      { label: 'Preprint', href: 'https://doi.org/10.64898/2026.01.22.701164' },
+    ],
+  },
+];
+
+const tags = [...new Set(packages.flatMap(pkg => pkg.tags))]
+  .sort((a, b) => a.localeCompare(b));
+---
+
+<BaseLayout title="Packages — Wei-Hao Lee">
+  <PageIntro
+    eyebrow="Research software"
+    title="Open tools for interpretable biology."
+    lede="Software developed alongside my research for extracting biological signal from complex single-cell and epigenomic data."
+  />
+
+  <section class="page-shell section collection-section package-section" style="padding-top: 0">
+    <CollectionFilter tags={tags} itemLabel="package" />
+
+    <div class="package-grid">
+      {packages.map(pkg => (
+        <article
+          class="package-card"
+          data-filter-item
+          data-tags={JSON.stringify(pkg.tags)}
+        >
+          <div class="package-mark">
+            <img src={pkg.icon} alt={pkg.iconAlt} />
+          </div>
+          <h3>{pkg.name}</h3>
+          <p>{pkg.desc}</p>
+          <div class="tag-row">
+            {pkg.tags.map(tag => <span class="tag">{tag}</span>)}
+          </div>
+          <div class="package-links">
+            {pkg.links.map(link => (
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                {link.label} <span aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
+          <div class="mono package-meta">
+            {pkg.lang}<br />
+            {pkg.publication}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

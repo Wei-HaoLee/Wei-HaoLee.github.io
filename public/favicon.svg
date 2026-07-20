@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 66 36">
+  <style>
+    .edges { fill: none; stroke: #315fc4; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .nodes { fill: #315fc4; }
+    @media (prefers-color-scheme: dark) {
+      .edges { stroke: #8eafff; }
+      .nodes { fill: #8eafff; }
+    }
+  </style>
+  <g class="edges">
+    <path d="M3 5 7 31 14 17 21 31 25 5M31 5v26M31 18h11M42 5v26M49 5v26h14"/>
+  </g>
+  <g class="nodes">
+    <circle cx="3" cy="5" r="2.7"/><circle cx="7" cy="31" r="2.7"/><circle cx="14" cy="17" r="2.7"/><circle cx="21" cy="31" r="2.7"/><circle cx="25" cy="5" r="2.7"/>
+    <circle cx="31" cy="5" r="2.7"/><circle cx="31" cy="18" r="2.7"/><circle cx="31" cy="31" r="2.7"/><circle cx="42" cy="5" r="2.7"/><circle cx="42" cy="18" r="2.7"/><circle cx="42" cy="31" r="2.7"/>
+    <circle cx="49" cy="5" r="2.7"/><circle cx="49" cy="31" r="2.7"/><circle cx="63" cy="31" r="2.7"/>
+  </g>
+</svg>

@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Icon from '../../components/Icon.astro';
+import CollectionFilter from '../../components/CollectionFilter.astro';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
+
+const tags = [...new Set(posts.flatMap(post => post.data.tags))]
+  .sort((a, b) => a.localeCompare(b));
+---
+
+<BaseLayout title="Blog — Wei-Hao Lee">
+  <PageIntro
+    eyebrow="Field notes"
+    title="Reading, coding, and other useful detours."
+    lede="Short notes and longer essays, with equations, runnable ideas, figures, and enough context to return to later."
+  />
+
+  <section class="page-shell section collection-section" style="padding-top: 0">
+    <CollectionFilter tags={tags} itemLabel="article" />
+
+    <div class="card-list">
+      {posts.map(post => (
+        <a
+          class="list-card"
+          data-filter-item
+          data-tags={JSON.stringify(post.data.tags)}
+          href={`/blog/${post.id}/`}
+        >
+          <span class="year">
+            {post.data.published.toLocaleDateString('en', {
+              year: 'numeric',
+              month: 'short',
+              day: '2-digit',
+              timeZone: 'UTC'
+            })}
+          </span>
+          <div>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+            <div class="tag-row">
+              {post.data.tags.map(tag => <span class="tag">{tag}</span>)}
+              <span class="tag">{post.data.readingTime}</span>
+            </div>
+          </div>
+          <Icon name="arrow" />
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

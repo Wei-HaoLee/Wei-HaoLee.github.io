@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('research')).map(entry => ({
+    params: { id: entry.id },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 6);
+---
+<BaseLayout title={`${entry.data.title} — Research`} description={entry.data.summary}>
+  <header class="detail-header page-shell">
+    <a class="detail-back mono" href="/research/">← Research</a>
+    <div class="detail-context mono">
+      <span>Research note</span>
+      <span>{entry.data.year}</span>
+      <span>{entry.data.status}</span>
+    </div>
+    <h1>{entry.data.title}</h1>
+    <p class="lede">{entry.data.summary}</p>
+    <div class="detail-labels" aria-label="Research labels">
+      <span class="detail-label-title mono">Labels</span>
+      <div class="tag-row">
+        {entry.data.tags.map((tag: string) => (
+          <a class="tag tag-link" href={`/research/?tag=${encodeURIComponent(tag)}`}>
+            {tag}
+          </a>
+        ))}
+      </div>
+    </div>
+  </header>
+  <section class="article-layout page-shell">
+    <article class="prose article-prose"><Content /></article>
+    {toc.length > 0 && (
+      <nav class="content-nav" aria-label="Research note contents" data-content-nav>
+        {toc.map((heading) => (
+          <a class={`content-nav-item toc-depth-${heading.depth}`} href={`#${heading.slug}`} data-toc-link>
+            <span class="toc-label">{heading.text}</span>
+            <span class="toc-mark" aria-hidden="true"></span>
+          </a>
+        ))}
+      </nav>
+    )}
+  </section>
+  <script>
+    const nav = document.querySelector('[data-content-nav]');
+    const links = nav ? [...nav.querySelectorAll('[data-toc-link]')] : [];
+    const sections = links.map((link) => document.getElementById(link.getAttribute('href')?.slice(1) || ''));
+    const setActive = () => {
+      let active = sections[0];
+
+      for (const section of sections) {
+        if (!section) continue;
+        if (section.getBoundingClientRect().top < window.innerHeight * 0.35) active = section;
+      }
+
+      links.forEach((link) => link.classList.toggle('is-active', link.getAttribute('href') === `#${active?.id}`));
+    };
+
+    setActive();
+    addEventListener('scroll', setActive, { passive: true });
+  </script>
+</BaseLayout>

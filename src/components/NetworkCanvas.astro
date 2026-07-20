@@ -1,0 +1,110 @@
+---
+interface GraphNode {
+  label: string;
+  count: number;
+  href: string;
+  kinds: string[];
+  related: { title: string; kind: string; href: string }[];
+  filters: { label: string; href: string }[];
+  x: number;
+  y: number;
+}
+
+interface Props {
+  nodes: GraphNode[];
+  edges: { from: number; to: number; weight: number }[];
+}
+
+const { nodes, edges } = Astro.props;
+const primary = nodes.toSorted((a, b) => b.count - a.count || a.label.localeCompare(b.label))[0];
+---
+<div class="network-stage" data-network aria-label="A map of topics used across research and blog posts">
+  <svg class="network-lines" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="none">
+    {edges.map(({ from, to, weight }) => {
+      const strength = Math.min(weight, 5) / 5;
+      return <line data-from={from} data-to={to} data-weight={weight} style={`--edge-width:${(.6 + strength * 1.5).toFixed(2)}px;--edge-tone:${Math.round(18 + strength * 42)}%`} x1={nodes[from].x} y1={nodes[from].y} x2={nodes[to].x} y2={nodes[to].y} />;
+    })}
+  </svg>
+  <div class="network-core" aria-live="polite">
+    <span data-network-count>{primary?.count ?? 0} {primary?.count === 1 ? 'entry' : 'entries'}</span>
+    <strong data-network-label>{primary?.label ?? 'topics'}</strong>
+    <span data-network-kind>{primary?.kinds.join(' + ') ?? 'research + blog'}</span>
+    <div class="network-preview" data-network-preview>
+      <div class="network-preview-list" data-network-items></div>
+      <div class="network-preview-filters" data-network-filters></div>
+    </div>
+  </div>
+  {nodes.map((node, index) => (
+    <a
+      class="network-node"
+      class:list={{ 'is-primary': node === primary }}
+      data-node={index}
+      data-count={node.count}
+      data-kind={node.kinds.join(' + ')}
+      data-label={node.label}
+      data-related={JSON.stringify(node.related)}
+      data-filters={JSON.stringify(node.filters)}
+      href={node.href}
+      title={node.label}
+      style={`--x:${node.x}%;--y:${node.y}%;--scale:${1 + Math.min(node.count - 1, 3) * .1}`}
+      aria-label={`Explore ${node.label}: ${node.count} ${node.count === 1 ? 'entry' : 'entries'}`}
+    >
+      <span class="network-node-dot"></span><span class="network-node-label">{node.label}</span>
+    </a>
+  ))}
+  <p class="network-caption"><span class="pulse"></span> Line weight = shared entries · hover to trace</p>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-network]').forEach(stage => {
+    const nodes = [...stage.querySelectorAll<HTMLElement>('[data-node]')];
+    const lines = [...stage.querySelectorAll<SVGLineElement>('.network-lines line')];
+    const label = stage.querySelector('[data-network-label]');
+    const count = stage.querySelector('[data-network-count]');
+    const kind = stage.querySelector('[data-network-kind]');
+    const preview = stage.querySelector<HTMLElement>('[data-network-preview]');
+    const itemList = stage.querySelector<HTMLElement>('[data-network-items]');
+    const filterList = stage.querySelector<HTMLElement>('[data-network-filters]');
+    let resetTimer = 0;
+    const cancelReset = () => window.clearTimeout(resetTimer);
+    const activate = (node: HTMLElement) => {
+      cancelReset();
+      const index = Number(node.dataset.node);
+      nodes.forEach(item => item.classList.toggle('is-related', lines.some(line => {
+        const from = Number(line.dataset.from); const to = Number(line.dataset.to);
+        return (from === index && to === Number(item.dataset.node)) || (to === index && from === Number(item.dataset.node));
+      })));
+      lines.forEach(line => line.classList.toggle('is-active', Number(line.dataset.from) === index || Number(line.dataset.to) === index));
+      stage.classList.add('has-focus'); node.classList.add('is-active');
+      if (label) label.textContent = node.dataset.label ?? '';
+      if (count) count.textContent = `${node.dataset.count} ${node.dataset.count === '1' ? 'entry' : 'entries'}`;
+      if (kind) kind.textContent = node.dataset.kind ?? '';
+      const related: { title: string; kind: string; href: string }[] = JSON.parse(node.dataset.related ?? '[]');
+      const filters: { label: string; href: string }[] = JSON.parse(node.dataset.filters ?? '[]');
+      itemList?.replaceChildren(...related.slice(0, 5).map(item => {
+        const link = document.createElement('a'); link.href = item.href;
+        const type = document.createElement('span'); type.textContent = item.kind;
+        const title = document.createElement('strong'); title.textContent = item.title;
+        link.append(type, title); return link;
+      }));
+      filterList?.replaceChildren(...filters.map(item => {
+        const link = document.createElement('a'); link.href = item.href; link.textContent = `Filter ${item.label} →`; return link;
+      }));
+      preview?.removeAttribute('hidden');
+    };
+    const reset = () => {
+      stage.classList.remove('has-focus');
+      nodes.forEach(item => item.classList.remove('is-related', 'is-active'));
+      lines.forEach(line => line.classList.remove('is-active'));
+    };
+    const scheduleReset = () => { resetTimer = window.setTimeout(reset, 180); };
+    nodes.forEach(node => {
+      node.addEventListener('pointerenter', () => activate(node));
+      node.addEventListener('focus', () => activate(node));
+      node.addEventListener('blur', scheduleReset);
+    });
+    stage.addEventListener('pointerenter', cancelReset);
+    stage.addEventListener('pointerleave', scheduleReset);
+    preview?.addEventListener('focusin', cancelReset);
+    preview?.addEventListener('focusout', scheduleReset);
+  });
+</script>

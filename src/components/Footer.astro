@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+const year = new Date().getFullYear();
+const updated = new Intl.DateTimeFormat('en', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(new Date());
+---
+<footer class="site-footer page-shell">
+  <div class="footer-meta">
+    <span><span class="mono">© {year}</span> Wei-Hao Lee.</span>
+    <span class="mono">Last updated {updated}</span>
+  </div>
+  <div class="socials" aria-label="Profiles">
+    <a href="mailto:Wei-Hao.Lee@rice.edu" aria-label="Email Wei-Hao Lee"><Icon name="email" /></a>
+    <a href="https://github.com/Wei-HaoLee" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)"><Icon name="github" /></a>
+    <a href="https://www.linkedin.com/in/weihaolee0612/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><Icon name="linkedin" /></a>
+    <a href="https://scholar.google.com/citations?user=Ea1NnsoAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" aria-label="Google Scholar (opens in a new tab)"><Icon name="scholar" /></a>
+    <a href="https://orcid.org/0000-0002-2688-7442" target="_blank" rel="noopener noreferrer" aria-label="ORCID (opens in a new tab)"><Icon name="orcid" /></a>
+  </div>
+</footer>

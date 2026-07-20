@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+---
+
+<BaseLayout
+    title="About — Wei-Hao Lee"
+    description="About Wei-Hao Lee, a Rice University PhD student developing bioinformatics and interpretable machine-learning methods for single-cell, epigenomic, and cancer data."
+>
+    <PageIntro
+        eyebrow="About"
+        title="Computation, guided by biology."
+        lede="I’m Wei-Hao Lee, a PhD student at Rice University developing interpretable methods for single-cell, epigenomic, and cancer data."
+    />
+
+    <section class="content-grid page-shell">
+        <aside class="side-note">
+            <img
+                class="profile-photo"
+                src="/images/profile/me.JPG"
+                alt="Wei-Hao Lee sitting on a bench overlooking the ocean"
+            />
+            <div class="current-note">
+                <h2 class="current-title">Currently</h2>
+                <p>
+                    PhD student<br />
+                    Synthetic, Physical, and Systems Biology<br />
+                    Rice University
+                </p>
+                <p>Advised by <a href="https://ylab.rice.edu/">Dr. Vicky Yao</a></p>
+            </div>
+        </aside>
+
+        <article class="prose about-prose">
+            <p>
+                Originally from Taiwan, I’m currently pursuing my PhD in
+                Synthetic, Physical, and Systems Biology at Rice University,
+                advised by <a href="https://ylab.rice.edu/">Dr. Vicky Yao</a>.
+            </p>
+
+            <h2 class="about-section-label">Research</h2>
+            <p>
+                My research focuses on developing bioinformatics methods for
+                <span class="research-highlight">single-cell, epigenomic, and cancer genomic data</span>,
+                including <span class="research-highlight">DNA methylation and mutation analysis</span>.
+                A central theme of my work is making computational results more
+                <span class="research-highlight">interpretable</span> and better aligned
+                with the biological mechanisms behind them.
+            </p>
+
+            <p>
+                I enjoy building flexible, customizable tools that let me tailor
+                models to specific biological questions. I’m also drawn to ideas
+                from other fields—such as <span class="research-highlight">dynamical systems</span>—that
+                can offer new ways to understand complex biological data.
+            </p>
+
+            <h2 class="about-section-label">Beyond research</h2>
+            <p>
+                Outside academia, I enjoy playing badminton, hiking, photography,
+                and exploring food from different cultures.
+            </p>
+
+            <p>
+                <a href="https://drive.google.com/file/d/1WU8U0anP83b54toIgj1jUbWmF9VtFMv1/view?usp=sharing">View my CV →</a>
+            </p>
+        </article>
+    </section>
+</BaseLayout>

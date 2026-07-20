@@ -1,0 +1,63 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Research, writing, software, and photography by Wei-Hao Lee.' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const pageSection = Astro.url.pathname.split('/').filter(Boolean)[0] ?? 'home';
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f7f4" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <title>{title}</title>
+    <script is:inline>
+      const saved = localStorage.getItem('theme');
+      document.documentElement.dataset.theme = saved || 'light';
+    </script>
+  </head>
+  <body data-page={pageSection}>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <Nav />
+    <main id="content"><slot /></main>
+    <Footer />
+    <script is:inline>
+      const themeButton = document.querySelector('[data-theme-toggle]');
+      const themes = ['light', 'dark', 'photo'];
+      const themeNames = {
+        light: 'daylight',
+        dark: 'dark',
+        photo: 'photo'
+      };
+      const setThemeLabel = () => {
+        const current = document.documentElement.dataset.theme || 'light';
+        const next = themes[(themes.indexOf(current) + 1) % themes.length] || 'light';
+        themeButton?.setAttribute('aria-label', `Switch to ${themeNames[next]} mode`);
+        themeButton?.setAttribute('data-label', `Mode: ${themeNames[current] || current}`);
+        themeButton?.setAttribute('aria-pressed', current === 'light' ? 'false' : 'true');
+      };
+      themeButton?.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme || 'light';
+        const next = themes[(themes.indexOf(current) + 1) % themes.length] || 'light';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+        setThemeLabel();
+      });
+      setThemeLabel();
+    </script>
+  </body>
+</html>

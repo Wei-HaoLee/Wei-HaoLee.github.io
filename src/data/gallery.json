@@ -1,0 +1,13 @@
+[
+  { "file": "photo-01.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-02.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-03.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-04.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-05.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-06.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-07.jpg", "location": "Yosemite National Park, CA" },
+  { "file": "photo-08.jpg", "location": "Monterey, CA" },
+  { "file": "photo-09.jpg", "location": "Monterey, CA" },
+  { "file": "photo-10.jpg", "location": "Monterey, CA" },
+  { "file": "photo-11.jpg", "location": "Chicago, IL" }
+]

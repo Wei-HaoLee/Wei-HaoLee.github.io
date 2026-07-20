@@ -1,0 +1,173 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+import galleryData from "../data/gallery.json";
+
+type GalleryPhoto = { file: string; location?: string; alt?: string };
+const photos: GalleryPhoto[] = galleryData;
+const locations = [
+  ...new Set(
+    photos.flatMap((photo) => (photo.location ? [photo.location] : [])),
+  ),
+].sort();
+---
+
+<BaseLayout title="Gallery — Wei-Hao Lee">
+  <PageIntro
+    eyebrow="Photography"
+    title="Things noticed along the way."
+    lede="A changing collection of places, patterns, and light."
+  />
+  <aside
+    class="gallery-rights page-shell"
+    aria-label="Photography copyright notice"
+  >
+    <span>© {new Date().getFullYear()} Wei-Hao Lee</span>
+    <p>
+      All photographs are original work. Please ask before reproducing or
+      redistributing.
+    </p>
+  </aside>
+  <div class="gallery-tools page-shell" data-gallery-filter-root>
+    <details class="gallery-location-filter">
+      <summary
+        >Locations <span data-gallery-filter-label>All photographs</span
+        ></summary
+      >
+      <div
+        class="gallery-location-options"
+        aria-label="Filter photographs by location"
+      >
+        <button
+          type="button"
+          class="is-active"
+          data-location-filter=""
+          aria-pressed="true">All photographs</button
+        >
+        {
+          locations.map((location) => (
+            <button
+              type="button"
+              data-location-filter={location}
+              aria-pressed="false"
+            >
+              {location}
+            </button>
+          ))
+        }
+      </div>
+    </details>
+    <p
+      class="gallery-filter-status mono"
+      data-gallery-filter-status
+      aria-live="polite"
+    >
+      {photos.length} photographs
+    </p>
+  </div>
+  <section
+    class="gallery-grid page-shell"
+    aria-label="Photography gallery"
+    data-gallery-protected
+  >
+    {
+      photos.map((photo, index) => (
+        <figure
+          class="photo"
+          data-gallery-item
+          data-location={photo.location ?? ""}
+          tabindex={photo.location ? "0" : undefined}
+          aria-label={
+            photo.location ? `Photograph taken in ${photo.location}` : undefined
+          }
+        >
+          <img
+            src={`/images/gallery/${photo.file}`}
+            alt={photo.alt ?? `Gallery photograph ${index + 1}`}
+            draggable="false"
+            loading="lazy"
+            decoding="async"
+          />
+          {photo.location && (
+            <figcaption>
+              <span aria-hidden="true" />
+              {photo.location}
+            </figcaption>
+          )}
+        </figure>
+      ))
+    }
+  </section>
+</BaseLayout>
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-gallery-protected]")
+    .forEach((element) => {
+      element.addEventListener("contextmenu", (event) =>
+        event.preventDefault(),
+      );
+    });
+  document
+    .querySelectorAll<HTMLElement>("[data-gallery-filter-root]")
+    .forEach((root) => {
+      const details = root.querySelector<HTMLDetailsElement>("details");
+      const controls = [
+        ...root.querySelectorAll<HTMLButtonElement>("[data-location-filter]"),
+      ];
+      const label = root.querySelector<HTMLElement>(
+        "[data-gallery-filter-label]",
+      );
+      const status = root.querySelector<HTMLElement>(
+        "[data-gallery-filter-status]",
+      );
+      const gallery = root.nextElementSibling;
+      const items = [
+        ...(gallery?.querySelectorAll<HTMLElement>("[data-gallery-item]") ??
+          []),
+      ];
+      const applyFilter = (requestedLocation: string, updateUrl = true) => {
+        const control = controls.find(
+          (item) =>
+            (item.dataset.locationFilter ?? "").toLocaleLowerCase() ===
+            requestedLocation.toLocaleLowerCase(),
+        );
+        const location = control?.dataset.locationFilter ?? "";
+        let visible = 0;
+        items.forEach((item) => {
+          const matches =
+            !location ||
+            item.dataset.location?.toLocaleLowerCase() ===
+              location.toLocaleLowerCase();
+          item.hidden = !matches;
+          if (matches) visible += 1;
+        });
+        controls.forEach((item) => {
+          const active = (item.dataset.locationFilter ?? "") === location;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        if (label) label.textContent = location || "All photographs";
+        if (status)
+          status.textContent = `${visible} photograph${visible === 1 ? "" : "s"}${location ? ` · ${location}` : ""}`;
+        if (updateUrl) {
+          const url = new URL(window.location.href);
+          if (location) url.searchParams.set("location", location);
+          else url.searchParams.delete("location");
+          history.replaceState({}, "", url);
+        }
+        if (details) details.open = false;
+      };
+      controls.forEach((control) =>
+        control.addEventListener("click", () =>
+          applyFilter(control.dataset.locationFilter ?? ""),
+        ),
+      );
+      const applyUrlFilter = () =>
+        applyFilter(
+          new URLSearchParams(window.location.search).get("location") ?? "",
+          false,
+        );
+      addEventListener("popstate", applyUrlFilter);
+      applyUrlFilter();
+    });
+</script>

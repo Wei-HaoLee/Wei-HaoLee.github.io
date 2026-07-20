@@ -1,0 +1,35 @@
+---
+import Icon from './Icon.astro';
+const links = [
+  ['/', 'Home', 'home'], ['/about', 'About', 'about'], ['/research', 'Research', 'research'],
+  ['/blog', 'Blog', 'blog'], ['/packages', 'Packages', 'package'], ['/gallery', 'Gallery', 'gallery']
+] as const;
+const current = Astro.url.pathname;
+---
+<header class="site-header" data-header>
+  <a class="brand" href="/" aria-label="Wei-Hao Lee, home">
+    <svg class="brand-mark" viewBox="0 0 66 36" aria-hidden="true">
+      <g class="brand-edges">
+        <path d="M3 5 7 31 14 17 21 31 25 5M31 5v26M31 18h11M42 5v26M49 5v26h14" />
+      </g>
+      <g class="brand-nodes">
+        <circle cx="3" cy="5" r="2.4"/><circle cx="7" cy="31" r="2.4"/><circle cx="14" cy="17" r="2.4"/><circle cx="21" cy="31" r="2.4"/><circle cx="25" cy="5" r="2.4"/>
+        <circle cx="31" cy="5" r="2.4"/><circle cx="31" cy="18" r="2.4"/><circle cx="31" cy="31" r="2.4"/><circle cx="42" cy="5" r="2.4"/><circle cx="42" cy="18" r="2.4"/><circle cx="42" cy="31" r="2.4"/>
+        <circle cx="49" cy="5" r="2.4"/><circle cx="49" cy="31" r="2.4"/><circle cx="63" cy="31" r="2.4"/>
+      </g>
+    </svg>
+    <span>WHL</span>
+  </a>
+  <nav class="nav-dock" aria-label="Primary navigation">
+    {links.map(([href, label, icon]) => <a href={href} data-label={label} class:list={{ active: current === href || (href !== '/' && current.startsWith(href)) }} aria-current={current === href || (href !== '/' && current.startsWith(href)) ? 'page' : undefined}><Icon name={icon} /><span>{label}</span></a>)}
+    <button class="theme-toggle" type="button" data-theme-toggle data-label="Change theme">
+      <Icon name="sun" />
+      <span class="mode-cue" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+  </nav>
+</header>
+<script>
+  const header = document.querySelector('[data-header]');
+  const update = () => header?.classList.toggle('is-scrolled', window.scrollY > 80);
+  update(); addEventListener('scroll', update, { passive: true });
+</script>

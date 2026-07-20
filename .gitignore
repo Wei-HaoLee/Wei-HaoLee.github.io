@@ -1,0 +1,42 @@
+# Dependencies and generated output
+node_modules/
+dist/
+.astro/
+docs/
+*.tsbuildinfo
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs, caches, and editor files
+*.log
+.npm/
+.cache/
+.DS_Store
+.idea/
+.vscode/
+.cursor/
+.codex/
+.agents/
+.direnv/
+.npmrc
+*.swp
+*~
+
+# Local planning notes
+_requirements.md
+
+# Keep original-resolution photo sources local. The deployable gallery uses the
+# optimized public/images/gallery/photo-*.jpg files generated from these files.
+public/images/backgrounds/DSCF*.JPG
+public/images/originals/
+
+# Unused local image experiments and placeholders
+public/images/backgrounds/site-photo-mode.jpg
+public/images/gallery/*.svg

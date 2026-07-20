@@ -1,0 +1,205 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NetworkCanvas from "../components/NetworkCanvas.astro";
+import Icon from "../components/Icon.astro";
+import { getCollection } from "astro:content";
+
+const blog = await getCollection("blog");
+const research = await getCollection("research");
+const entries = [
+  ...blog.map((item) => ({
+    type: "Blog",
+    title: item.data.title,
+    summary: item.data.description,
+    tags: item.data.tags,
+    date: item.data.updated ?? item.data.published,
+    href: `/blog/${item.id}/`,
+    meta: item.data.readingTime,
+  })),
+  ...research.map((item) => ({
+    type: "Research",
+    title: item.data.title,
+    summary: item.data.summary,
+    tags: item.data.tags,
+    date: item.data.updated ?? new Date(`${item.data.year}-01-01`),
+    href: `/research/${item.id}/`,
+    meta: item.data.status,
+  })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+const recentEntries = entries.slice(0, 5);
+
+const tagMap = new Map<
+  string,
+  {
+    count: number;
+    kinds: Set<string>;
+    related: { title: string; kind: string; href: string }[];
+  }
+>();
+
+entries.forEach((entry) =>
+  entry.tags.forEach((tag) => {
+    const key = tag.toLowerCase();
+    const current = tagMap.get(key) ?? {
+      count: 0,
+      kinds: new Set<string>(),
+      related: [],
+    };
+    current.count += 1;
+    current.kinds.add(entry.type.toLowerCase());
+    current.related.push({
+      title: entry.title,
+      kind: entry.type,
+      href: entry.href,
+    });
+    tagMap.set(key, current);
+  }),
+);
+
+const positions = [
+  [50, 8],
+  [25, 18],
+  [75, 18],
+  [15, 38],
+  [85, 38],
+  [15, 64],
+  [85, 64],
+  [27, 83],
+  [73, 83],
+  [50, 92],
+];
+
+const graphTags = [...tagMap.entries()]
+  .sort((a, b) => b[1].count - a[1].count || a[0].localeCompare(b[0]))
+  .slice(0, positions.length);
+
+const graphNodes = graphTags.map(([label, value], index) => ({
+  label,
+  count: value.count,
+  kinds: [...value.kinds],
+  related: value.related.slice(0, 5),
+  filters: [...value.kinds].map((kind) => ({
+    label: kind,
+    href: `/${kind}?tag=${encodeURIComponent(label)}`,
+  })),
+  href: `/${value.kinds.has("research") ? "research" : "blog"}?tag=${encodeURIComponent(label)}`,
+  x: positions[index % positions.length][0],
+  y: positions[index % positions.length][1],
+}));
+
+const edgeWeights = new Map<string, number>();
+entries.forEach((entry) => {
+  const indexes = [
+    ...new Set(
+      entry.tags
+        .map((tag) =>
+          graphNodes.findIndex((node) => node.label === tag.toLowerCase()),
+        )
+        .filter((index) => index >= 0),
+    ),
+  ];
+
+  indexes.forEach((from, i) =>
+    indexes.slice(i + 1).forEach((to) => {
+      const [a, b] = [from, to].sort((left, right) => left - right);
+      const key = `${a}:${b}`;
+      edgeWeights.set(key, (edgeWeights.get(key) ?? 0) + 1);
+    }),
+  );
+});
+
+const graphEdges = [...edgeWeights.entries()].map(([key, weight]) => {
+  const [from, to] = key.split(":").map(Number);
+  return { from, to, weight };
+});
+---
+
+<BaseLayout
+  title="Wei-Hao Lee — Computational Biology & Bioinformatics"
+  description="Wei-Hao Lee is a PhD student at Rice University developing bioinformatics and interpretable machine-learning methods for single-cell, epigenomic, and cancer data."
+>
+  <section class="hero page-shell">
+    <div class="hero-copy">
+      <p class="eyebrow">Bioinformatics · cancer genomics · interpretable ML</p>
+      <h1>
+        I build computational methods for <span>biological discovery.</span>
+      </h1>
+      <p class="lede">
+        I’m a PhD student at Rice University developing bioinformatics tools for
+        single-cell and epigenomic data, studying cancer mutations, and making
+        machine-learning results more interpretable.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/research">
+          Explore research <Icon name="arrow" />
+        </a>
+        <a class="button" href="/about">A little about me</a>
+      </div>
+    </div>
+    <NetworkCanvas nodes={graphNodes} edges={graphEdges} />
+    <a class="home-scroll-cue" href="#latest-updates">
+      <span>Latest updates</span>
+      <i aria-hidden="true"></i>
+    </a>
+  </section>
+
+  <section class="section page-shell recent-section" id="latest-updates">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Recently updated</p>
+        <h2>From the notebook</h2>
+      </div>
+      <p>
+        New research notes and writing, ordered by the date they were last
+        revised.
+      </p>
+    </div>
+
+    <div
+      class="update-table"
+      role="table"
+      aria-label="Recently updated research and blog posts"
+    >
+      <div class="update-row update-head" role="row">
+        <span role="columnheader">Updated</span>
+        <span role="columnheader">Type</span>
+        <span role="columnheader">Entry</span>
+        <span role="columnheader">Topics</span>
+        <span aria-hidden="true"></span>
+      </div>
+
+      {
+        recentEntries.map((entry) => (
+          <a class="update-row" role="row" href={entry.href}>
+            <time role="cell" datetime={entry.date.toISOString()}>
+              {entry.date.toLocaleDateString("en", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+                timeZone: "UTC",
+              })}
+            </time>
+            <span class="update-type" role="cell">
+              {entry.type}
+            </span>
+            <span class="update-title" role="cell">
+              <strong>{entry.title}</strong>
+              <small>{entry.summary}</small>
+            </span>
+            <span class="update-tags" role="cell">
+              {entry.tags.slice(0, 2).map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </span>
+            <Icon name="arrow" />
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="update-links">
+      <a href="/research">All research <Icon name="arrow" /></a>
+      <a href="/blog">All writing <Icon name="arrow" /></a>
+    </div>
+  </section>
+</BaseLayout>

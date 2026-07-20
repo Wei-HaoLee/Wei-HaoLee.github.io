@@ -1,0 +1,84 @@
+---
+interface Props {
+  tags: string[];
+  itemLabel: string;
+}
+
+const { tags, itemLabel } = Astro.props;
+---
+<div class="collection-filter" data-filter-root data-item-label={itemLabel}>
+  <div class="filter-row" aria-label={`Filter by ${itemLabel} label`}>
+    <button class="tag filter-tag is-active" type="button" data-filter-clear aria-pressed="true">All</button>
+    {tags.map(tag => <button class="tag filter-tag" type="button" data-filter-tag={tag} aria-pressed="false">{tag}</button>)}
+  </div>
+  <div class="filter-meta">
+    <p class="filter-status mono" data-filter-status aria-live="polite"></p>
+    <button class="filter-reset" type="button" data-filter-reset disabled>Reset filters</button>
+  </div>
+</div>
+<p class="filter-empty" data-filter-empty hidden>No entries match every selected topic. Remove a filter to broaden the list.</p>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-filter-root]').forEach(root => {
+    const controls = [...root.querySelectorAll<HTMLButtonElement>('[data-filter-tag]')];
+    const clearControl = root.querySelector<HTMLButtonElement>('[data-filter-clear]');
+    const resetControl = root.querySelector<HTMLButtonElement>('[data-filter-reset]');
+    const container = root.parentElement;
+    const items = [...(container?.querySelectorAll<HTMLElement>('[data-filter-item]') ?? [])];
+    const status = root.querySelector<HTMLElement>('[data-filter-status]');
+    const empty = container?.querySelector<HTMLElement>('[data-filter-empty]');
+    const itemLabel = root.dataset.itemLabel ?? 'item';
+    const pluralLabel = itemLabel.endsWith('y') ? `${itemLabel.slice(0, -1)}ies` : `${itemLabel}s`;
+
+    let selectedTags: string[] = [];
+
+    const normalizeTags = (requestedTags: string[]) => requestedTags.reduce<string[]>((valid, requestedTag) => {
+      const match = controls.find(control => control.dataset.filterTag?.toLocaleLowerCase() === requestedTag.toLocaleLowerCase());
+      const tag = match?.dataset.filterTag;
+      if (tag && !valid.some(item => item.toLocaleLowerCase() === tag.toLocaleLowerCase())) valid.push(tag);
+      return valid;
+    }, []);
+
+    const applyFilter = (requestedTags: string[], updateUrl = true) => {
+      selectedTags = normalizeTags(requestedTags);
+      let visible = 0;
+
+      items.forEach(item => {
+        const itemTags: string[] = JSON.parse(item.dataset.tags ?? '[]');
+        const matches = selectedTags.every(tag => itemTags.some(itemTag => itemTag.toLocaleLowerCase() === tag.toLocaleLowerCase()));
+        item.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      controls.forEach(control => {
+        const active = selectedTags.some(tag => tag.toLocaleLowerCase() === (control.dataset.filterTag ?? '').toLocaleLowerCase());
+        control.classList.toggle('is-active', active);
+        control.setAttribute('aria-pressed', String(active));
+      });
+      clearControl?.classList.toggle('is-active', selectedTags.length === 0);
+      clearControl?.setAttribute('aria-pressed', String(selectedTags.length === 0));
+      if (resetControl) resetControl.disabled = selectedTags.length === 0;
+
+      if (status) status.textContent = `${visible} ${visible === 1 ? itemLabel : pluralLabel}${selectedTags.length ? ` matching ${selectedTags.map(tag => `“${tag}”`).join(' + ')}` : ''}`;
+      if (empty) empty.hidden = visible !== 0;
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('tag');
+        selectedTags.forEach(tag => url.searchParams.append('tag', tag));
+        history.replaceState({}, '', url);
+      }
+    };
+
+    controls.forEach(control => control.addEventListener('click', () => {
+      const tag = control.dataset.filterTag ?? '';
+      const active = selectedTags.some(item => item.toLocaleLowerCase() === tag.toLocaleLowerCase());
+      applyFilter(active ? selectedTags.filter(item => item.toLocaleLowerCase() !== tag.toLocaleLowerCase()) : [...selectedTags, tag]);
+    }));
+    clearControl?.addEventListener('click', () => applyFilter([]));
+    resetControl?.addEventListener('click', () => applyFilter([]));
+    const applyUrlFilter = () => applyFilter(new URLSearchParams(window.location.search).getAll('tag'), false);
+    addEventListener('popstate', applyUrlFilter);
+    applyUrlFilter();
+  });
+</script>
