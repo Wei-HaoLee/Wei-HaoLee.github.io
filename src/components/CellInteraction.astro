@@ -1,0 +1,95 @@
+<svg class="cell-interaction" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <defs>
+    <path id="ligand-a" d="M316 157C390 128 500 170 578 230" />
+    <path id="ligand-b" d="M316 157C402 174 508 210 579 250" />
+    <path id="ligand-c" d="M316 157C395 149 502 185 578 230" />
+  </defs>
+
+  <g class="interaction-scene-float">
+    <animateTransform attributeName="transform" type="translate" dur="29s" begin="-8s" repeatCount="indefinite"
+      values="0 -4;7 1;2 8;-5 3;0 -4" keyTimes="0;.32;.65;.84;1" calcMode="spline"
+      keySplines=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1" />
+  <g class="transmission-trajectories">
+    <use href="#ligand-a"/><use href="#ligand-b"/><use href="#ligand-c"/>
+  </g>
+
+  <g class="interaction-cell interaction-donor" transform="translate(-10 8) scale(.96)">
+    <path class="interaction-membrane donor-membrane" d="M340 155C340 245 286 298 194 298C101 298 55 240 66 150C77 58 142 20 229 38C302 53 340 91 340 155Z">
+      <animate attributeName="d" dur="20s" repeatCount="indefinite"
+        values="M340 155C340 245 286 298 194 298C101 298 55 240 66 150C77 58 142 20 229 38C302 53 340 91 340 155Z;M340 155C340 231 300 302 202 292C111 283 57 231 70 143C84 53 154 14 235 42C307 66 340 102 340 155Z;M340 155C340 245 286 298 194 298C101 298 55 240 66 150C77 58 142 20 229 38C302 53 340 91 340 155Z" />
+    </path>
+    <path class="interaction-bilayer donor-bilayer" d="M340 155C340 245 286 298 194 298C101 298 55 240 66 150C77 58 142 20 229 38C302 53 340 91 340 155Z">
+      <animate attributeName="d" dur="20s" repeatCount="indefinite"
+        values="M340 155C340 245 286 298 194 298C101 298 55 240 66 150C77 58 142 20 229 38C302 53 340 91 340 155Z;M340 155C340 231 300 302 202 292C111 283 57 231 70 143C84 53 154 14 235 42C307 66 340 102 340 155Z;M340 155C340 245 286 298 194 298C101 298 55 240 66 150C77 58 142 20 229 38C302 53 340 91 340 155Z" />
+    </path>
+    <g class="interaction-anatomy">
+      <ellipse class="interaction-nucleus" cx="175" cy="162" rx="42" ry="36" />
+      <ellipse class="interaction-nuclear-envelope" cx="175" cy="162" rx="35" ry="29" />
+      <circle class="interaction-nucleolus" cx="187" cy="152" r="9" />
+      <path class="interaction-er" d="M106 132c19-18 37-23 57-21M95 146c23-17 45-21 67-16M96 164c20-11 40-14 61-8" />
+      <path class="interaction-golgi" d="M205 221c25 13 47 12 67 1M207 232c22 12 42 12 61 3M214 242c17 8 32 9 47 4" />
+      <g class="interaction-mito"><path d="M119 217c20-15 42-2 37 16s-30 24-44 9-9-17 7-25Z"/><path d="M116 231c8-12 14 8 23-3s12 7 17 1"/></g>
+      <g class="interaction-mito interaction-mito-b"><path d="M235 88c18-12 38 0 33 16s-27 20-39 7-7-15 6-23Z"/><path d="M233 100c7-10 13 7 21-2s10 6 14 1"/></g>
+      <g class="interaction-ribosomes"><circle cx="102" cy="188" r="2"/><circle cx="145" cy="83" r="1.8"/><circle cx="239" cy="188" r="1.7"/><circle cx="283" cy="116" r="1.8"/><circle cx="87" cy="111" r="1.6"/></g>
+      <g class="interaction-vesicles"><circle cx="278" cy="213" r="4"/><circle cx="289" cy="202" r="3"/><circle cx="257" cy="236" r="3.5"/></g>
+    </g>
+
+    <g class="interaction-motion donor-vesicle">
+      <circle class="vesicle-shell" cx="324" cy="155" r="15" />
+      <circle class="vesicle-cargo" cx="318" cy="151" r="3"/><circle class="vesicle-cargo" cx="326" cy="159" r="3"/><circle class="vesicle-cargo" cx="330" cy="149" r="2.5"/><circle class="vesicle-cargo" cx="319" cy="163" r="2.2"/>
+    </g>
+    <path class="interaction-motion fusion-omega" d="M340 137C319 139 319 171 340 173" />
+    <path class="interaction-motion fusion-pore" d="M337 148v14M343 148v14" />
+  </g>
+
+  <g class="interaction-cell interaction-receiver" transform="translate(15 75) scale(1.06)">
+    <path class="interaction-membrane receiver-membrane" d="M540 132L540 179C540 250 590 290 664 289C754 306 822 269 830 180C837 95 778 38 685 34C601 30 548 69 540 132Z">
+      <animate attributeName="d" dur="22s" repeatCount="indefinite"
+        values="M540 132L540 179C540 250 590 290 664 289C754 306 822 269 830 180C837 95 778 38 685 34C601 30 548 69 540 132Z;M540 132L540 179C542 242 594 292 654 284C742 309 811 277 825 190C838 106 784 52 696 38C613 25 549 67 540 132Z;M540 132L540 179C540 250 590 290 664 289C754 306 822 269 830 180C837 95 778 38 685 34C601 30 548 69 540 132Z" />
+    </path>
+    <path class="interaction-bilayer receiver-bilayer" d="M540 132L540 179C540 250 590 290 664 289C754 306 822 269 830 180C837 95 778 38 685 34C601 30 548 69 540 132Z">
+      <animate attributeName="d" dur="22s" repeatCount="indefinite"
+        values="M540 132L540 179C540 250 590 290 664 289C754 306 822 269 830 180C837 95 778 38 685 34C601 30 548 69 540 132Z;M540 132L540 179C542 242 594 292 654 284C742 309 811 277 825 190C838 106 784 52 696 38C613 25 549 67 540 132Z;M540 132L540 179C540 250 590 290 664 289C754 306 822 269 830 180C837 95 778 38 685 34C601 30 548 69 540 132Z" />
+    </path>
+    <g class="interaction-anatomy">
+      <ellipse class="interaction-nucleus" cx="692" cy="165" rx="44" ry="37" />
+      <ellipse class="interaction-nuclear-envelope" cx="692" cy="165" rx="37" ry="30" />
+      <circle class="interaction-nucleolus" cx="704" cy="153" r="9" />
+      <path class="interaction-er" d="M615 128c20-15 40-19 61-14M606 142c23-13 46-15 67-9M608 157c20-8 40-9 59-4" />
+      <path class="interaction-golgi" d="M715 224c23 12 44 11 63 1M717 235c21 10 39 10 57 2M723 245c16 7 30 7 44 3" />
+      <g class="interaction-mito"><path d="M614 215c19-14 40-2 36 15s-28 23-42 9-9-16 6-24Z"/><path d="M612 228c8-11 14 8 22-3s11 7 16 1"/></g>
+      <g class="interaction-mito interaction-mito-b"><path d="M748 90c18-12 38 0 33 16s-27 20-39 7-7-15 6-23Z"/><path d="M746 102c7-10 13 7 21-2s10 6 14 1"/></g>
+      <g class="interaction-ribosomes"><circle cx="590" cy="181" r="2"/><circle cx="641" cy="83" r="1.8"/><circle cx="747" cy="188" r="1.7"/><circle cx="792" cy="132" r="1.8"/><circle cx="602" cy="103" r="1.6"/></g>
+      <g class="interaction-vesicles"><circle cx="778" cy="211" r="4"/><circle cx="790" cy="201" r="3"/><circle cx="756" cy="243" r="3.5"/></g>
+    </g>
+
+    <g class="membrane-proteins">
+      <g class="small-receptor receptor-cluster receptor-one">
+        <path d="M538 146h-4M534 146l-3-3M534 146l-3 3M543 146h6l3 2"/><rect x="537.5" y="143" width="5.5" height="6" rx="2"/>
+      </g>
+      <g class="small-receptor receptor-cluster receptor-two">
+        <path d="M538 165h-4M534 165l-3-4M534 165l-2 3M543 165h7l2-2"/><rect x="537.5" y="162" width="5.5" height="6" rx="2"/>
+      </g>
+    </g>
+    <path class="interaction-motion uptake-pit" d="M540 132C548 142 548 169 540 179">
+      <animate attributeName="d" dur="14s" repeatCount="indefinite"
+        values="M540 132C548 142 548 169 540 179;M540 132C548 142 548 169 540 179;M540 132C590 139 590 171 540 179;M540 132C548 142 548 169 540 179"
+        keyTimes="0;.68;.84;1" />
+    </path>
+    <g class="interaction-motion uptake-endosome">
+      <circle class="endosome-shell" cx="566" cy="155" r="17" />
+      <circle class="bound-ligand" cx="558" cy="150" r="3"/><circle class="bound-ligand" cx="558" cy="161" r="3"/>
+      <path class="internal-receptors" d="M561 150h9M561 161h9" />
+    </g>
+  </g>
+
+  <g class="interaction-motion extracellular-ligands">
+    <circle r="3.3"><animateMotion dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.26;.7;1"><mpath href="#ligand-a"/></animateMotion></circle>
+    <circle r="2.7"><animateMotion dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.28;.72;1"><mpath href="#ligand-b"/></animateMotion></circle>
+    <circle r="2.4"><animateMotion dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.3;.74;1"><mpath href="#ligand-c"/></animateMotion></circle>
+    <circle r="2.9"><animateMotion dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.32;.72;1"><mpath href="#ligand-a"/></animateMotion></circle>
+    <circle r="2.2"><animateMotion dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.34;.76;1"><mpath href="#ligand-b"/></animateMotion></circle>
+    <circle r="2.6"><animateMotion dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.36;.74;1"><mpath href="#ligand-c"/></animateMotion></circle>
+  </g>
+  </g>
+</svg>

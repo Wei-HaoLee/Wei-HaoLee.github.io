@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import NetworkCanvas from "../components/NetworkCanvas.astro";
+import CellInteraction from "../components/CellInteraction.astro";
 import Icon from "../components/Icon.astro";
 import { getCollection } from "astro:content";
 
@@ -119,6 +120,9 @@ const graphEdges = [...edgeWeights.entries()].map(([key, weight]) => {
   description="Wei-Hao Lee is a PhD student at Rice University developing bioinformatics and interpretable machine-learning methods for single-cell, epigenomic, and cancer data."
 >
   <section class="hero page-shell">
+    <div class="cellular-field" aria-hidden="true">
+      <CellInteraction />
+    </div>
     <div class="hero-copy">
       <p class="eyebrow">Bioinformatics · cancer genomics · interpretable ML</p>
       <h1>

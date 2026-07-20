@@ -8,17 +8,19 @@ const current = Astro.url.pathname;
 ---
 <header class="site-header" data-header>
   <a class="brand" href="/" aria-label="Wei-Hao Lee, home">
-    <svg class="brand-mark" viewBox="0 0 66 36" aria-hidden="true">
-      <g class="brand-edges">
-        <path d="M3 5 7 31 14 17 21 31 25 5M31 5v26M31 18h11M42 5v26M49 5v26h14" />
+    <svg class="brand-mark" viewBox="0 0 60 34" aria-hidden="true">
+      <g class="brand-monogram">
+        <path d="M2 4.5 7.5 29 14 15l6.5 14L26 4.5M32 4.5v24.5M32 17h11M43 4.5V29M49 4.5V29h9" />
+      </g>
+      <g class="brand-connector">
+        <path d="M2 4.5 32 4.5 58 29M7.5 29 32 17 49 4.5M20.5 29H43L58 29M14 15 43 17 49 29" />
       </g>
       <g class="brand-nodes">
-        <circle cx="3" cy="5" r="2.4"/><circle cx="7" cy="31" r="2.4"/><circle cx="14" cy="17" r="2.4"/><circle cx="21" cy="31" r="2.4"/><circle cx="25" cy="5" r="2.4"/>
-        <circle cx="31" cy="5" r="2.4"/><circle cx="31" cy="18" r="2.4"/><circle cx="31" cy="31" r="2.4"/><circle cx="42" cy="5" r="2.4"/><circle cx="42" cy="18" r="2.4"/><circle cx="42" cy="31" r="2.4"/>
-        <circle cx="49" cy="5" r="2.4"/><circle cx="49" cy="31" r="2.4"/><circle cx="63" cy="31" r="2.4"/>
+        <circle cx="2" cy="4.5" r="1.55"/><circle cx="7.5" cy="29" r="1.55"/><circle cx="14" cy="15" r="1.8"/><circle cx="20.5" cy="29" r="1.55"/><circle cx="26" cy="4.5" r="1.55"/>
+        <circle cx="32" cy="4.5" r="1.55"/><circle cx="32" cy="17" r="1.8"/><circle cx="32" cy="29" r="1.55"/><circle cx="43" cy="4.5" r="1.55"/><circle cx="43" cy="17" r="1.8"/><circle cx="43" cy="29" r="1.55"/>
+        <circle cx="49" cy="4.5" r="1.55"/><circle cx="49" cy="29" r="1.8"/><circle cx="58" cy="29" r="1.55"/>
       </g>
     </svg>
-    <span>WHL</span>
   </a>
   <nav class="nav-dock" aria-label="Primary navigation">
     {links.map(([href, label, icon]) => <a href={href} data-label={label} class:list={{ active: current === href || (href !== '/' && current.startsWith(href)) }} aria-current={current === href || (href !== '/' && current.startsWith(href)) ? 'page' : undefined}><Icon name={icon} /><span>{label}</span></a>)}
