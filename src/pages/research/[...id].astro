@@ -17,7 +17,7 @@ const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 6)
   <header class="detail-header page-shell">
     <a class="detail-back mono" href="/research/">← Research</a>
     <div class="detail-context mono">
-      <span>Research note</span>
+      <span>Research project</span>
       <span>{entry.data.year}</span>
       <span>{entry.data.status}</span>
     </div>
@@ -33,9 +33,32 @@ const toc = headings.filter((heading) => heading.depth > 1 && heading.depth < 6)
         ))}
       </div>
     </div>
+    {entry.data.links.length > 0 && (
+      <nav class="detail-actions" aria-label="Project resources">
+        {entry.data.links.map((link: { label: string; href: string }) => (
+          <a
+            href={link.href}
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            {link.label} <span aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </nav>
+    )}
   </header>
   <section class="article-layout page-shell">
-    <article class="prose article-prose"><Content /></article>
+    <article class="prose article-prose">
+      {entry.data.overview && (
+        <figure class="research-overview">
+          <img src={entry.data.overview.src} alt={entry.data.overview.alt} />
+          {entry.data.overview.caption && (
+            <figcaption>{entry.data.overview.caption}</figcaption>
+          )}
+        </figure>
+      )}
+      <Content />
+    </article>
     {toc.length > 0 && (
       <nav class="content-nav" aria-label="Research note contents" data-content-nav>
         {toc.map((heading) => (

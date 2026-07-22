@@ -9,7 +9,16 @@ const research = defineCollection({
     status: z.string(),
     year: z.number(),
     updated: z.coerce.date().optional(),
-    tags: z.array(z.string()),
+    tags: z.array(z.string()).max(3),
+    links: z.array(z.object({
+      label: z.string(),
+      href: z.string()
+    })).default([]),
+    overview: z.object({
+      src: z.string(),
+      alt: z.string(),
+      caption: z.string().optional()
+    }).optional(),
     featured: z.boolean().default(false),
     accent: z.enum(['blue', 'cyan', 'violet']).default('blue')
   })
